@@ -122,11 +122,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _determinePosition();
-    listenToLocationChanges();
+    _requestLocationServicePermissions();
   }
 
-  void _determinePosition() async {
+  void _requestLocationServicePermissions() async {
     // Test if location services are enabled.
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -163,9 +162,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
       return;
     }
+  }
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
+  void captureLocation() async {
     Position position = await Geolocator.getCurrentPosition();
     print("Current Position $position");
     setState(() {
@@ -180,7 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _goViewData() {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => DataHome(
-              title: 'Datttta',
+              title: 'Json Raw Viewer',
             )));
   }
 
@@ -195,19 +194,6 @@ class _MyHomePageState extends State<MyHomePage> {
         print(position == null ? 'Unknown' : '$position');
         setState(() {
           currentPosition = position;
-
-          // PositionInterface newPosition = PositionInterface();
-
-          // newPosition.latitude = currentPosition?.latitude;
-          // newPosition.longitude = currentPosition?.longitude;
-          // newPosition.timestamp = DateTime.now().millisecondsSinceEpoch;
-
-          // positionRecollected?.add(newPosition);
-
-          // print("La lista que llevamos hasta ahora es");
-          // print(positionRecollected.toString());
-          // writePositionsToFile(positionRecollected!);
-
           if (statusRecording) {
             PositionInterface newPosition = PositionInterface();
             newPosition.latitude = currentPosition?.latitude;
@@ -222,18 +208,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void calculateDistance() {
-    /// startLatitude, startLongitude, endLatitude, endLongitude
-    double distanceInMeters = Geolocator.distanceBetween(
-        52.2165157, 6.9437819, 52.3546274, 4.8285838);
-  }
-
   void _recordPositionToJson() {
-    print("Estaba antes de pulsar el boton: ${statusRecording}");
+    listenToLocationChanges();
+    captureLocation();
     setState(() {
       statusRecording = !statusRecording;
     });
-    print("Ahora está en: ${statusRecording}");
   }
 
   void _incrementCounter() {
@@ -322,7 +302,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
 
       // floatingActionButton: FloatingActionButton(
-      //   onPressed: _determinePosition,
+      //   onPressed: _requestLocationServicePermissions,
       //   tooltip: 'Increment',
       //   child: const Icon(Icons.add),
       // ), // This trailing comma makes auto-formatting nicer for build methods.
@@ -378,7 +358,7 @@ class _DataHomeState extends State<DataHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('New Screen')),
+      appBar: AppBar(title: Text(widget.title)),
       // body: const Center(
       //   child: Text(toShow, style: TextStyle(fontSize: 24.0)),
       // ),
