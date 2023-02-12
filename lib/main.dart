@@ -12,6 +12,8 @@ import 'dart:convert';
 
 import 'dart:io';
 
+import 'package:lottie/lottie.dart';
+
 Future<String> get _localPath async {
   final directory = await getApplicationDocumentsDirectory();
   return directory.path;
@@ -111,6 +113,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool statusRecording = false;
 
+  bool showAnimationLocationTracking = false;
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -194,6 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
         print(position == null ? 'Unknown' : '$position');
         setState(() {
           currentPosition = position;
+
           if (statusRecording) {
             PositionInterface newPosition = PositionInterface();
             newPosition.latitude = currentPosition?.latitude;
@@ -201,7 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
             newPosition.timestamp = DateTime.now().millisecondsSinceEpoch;
             positionRecollected?.add(newPosition);
             writePositionsToFile(positionRecollected!);
-            print("saved!");
+            print("Location saved to file!");
           }
         });
       },
@@ -213,6 +218,7 @@ class _MyHomePageState extends State<MyHomePage> {
     captureLocation();
     setState(() {
       statusRecording = !statusRecording;
+      showAnimationLocationTracking = !showAnimationLocationTracking;
     });
   }
 
@@ -259,40 +265,80 @@ class _MyHomePageState extends State<MyHomePage> {
           // center the children vertically; the main axis here is the vertical
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            // const Text(
-            //   'You have pushed the button this many times:',
-            // ),
-            // Text(
-            //   '$_counter',
-            //   style: Theme.of(context).textTheme.headlineMedium,
-            // ),
-            const Text('Realtime LatLon:'),
-            Text(currentPosition != null
-                ? '${currentPosition?.latitude}, ${currentPosition?.longitude}'
-                : 'no data'),
-            TextButton(
-                style: ButtonStyle(
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue),
+            Container(
+                // color: Colors.red,
+                child: SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: Visibility(
+                        visible: showAnimationLocationTracking,
+                        child: Lottie.network(
+                            'https://assets3.lottiefiles.com/packages/lf20_FtD13Z.json')))),
+            Container(
+                // color: Colors.yellow,
+                child: Column(children: [
+              const Text('Realtime LatLon:'),
+              Text(currentPosition != null
+                  ? 'Lat: ${currentPosition?.latitude}'
+                  : 'no data'),
+              Text(currentPosition != null
+                  ? 'Lon: ${currentPosition?.longitude}'
+                  : 'no data'),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Icon(
+                  Icons.rocket_launch,
+                  color: Colors.blue,
+                  size: 24.0,
+                  semanticLabel: 'Start recording location tracking',
                 ),
-                onPressed: _recordPositionToJson,
-                child: Text(statusRecording ? 'Stop' : 'Start')),
-            TextButton(
-                onPressed: _eraseData,
-                style: ButtonStyle(
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.orange),
+                TextButton(
+                    style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.blue),
+                    ),
+                    onPressed: _recordPositionToJson,
+                    child: Text(statusRecording ? 'Stop' : 'Start'))
+              ]),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Icon(
+                  Icons.delete,
+                  color: Colors.orange,
+                  size: 24.0,
+                  semanticLabel: 'Erase recorded data',
                 ),
-                child: Text("Erase data")),
-            TextButton(
-                onPressed: _goViewData,
-                style: ButtonStyle(
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.pink),
+                TextButton(
+                    onPressed: () =>
+                        {_eraseData(), positionRecollected?.clear()},
+                    style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.orange),
+                    ),
+                    child: Text("Erase data"))
+              ]),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Icon(
+                  Icons.data_array_rounded,
+                  color: Colors.pink,
+                  size: 24.0,
+                  semanticLabel: 'View recorded data',
                 ),
-                child: Text("View Data"))
+                TextButton(
+                    onPressed: _goViewData,
+                    style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.pink),
+                    ),
+                    child: Text("View Data"))
+              ]),
+            ])),
+            // Divider(),
+
+            // showAnimationLocationTracking
+            //     ? Lottie.network(
+            //         'https://assets3.lottiefiles.com/packages/lf20_FtD13Z.json')
+            //     : null
 
             // Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
             //   Text('hola'),
