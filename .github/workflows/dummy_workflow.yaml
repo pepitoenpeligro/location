@@ -11,7 +11,7 @@ on:
 
 jobs:
   somejob:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     
       - uses: actions/checkout@v2
@@ -28,11 +28,11 @@ jobs:
           aws-access-key-id: ${{ env.AKID }}
           aws-secret-access-key: ${{ env.SKID }}
           aws-region: eu-west-1
-      - name: Start SSM Session
-        run: aws ssm start-session --region 'eu-west-1' \
-              --target 'i-040f8582e37915507' \
-              --document-name AWS-StartPortForwardingSessionToRemoteHost \
-              --parameters portNumber="443",localPortNumber="443" &
+      # - name: Start SSM Session
+      #   run: aws ssm start-session --region 'eu-west-1' \
+      #         --target 'i-040f8582e37915507' \
+      #         --document-name AWS-StartPortForwardingSessionToRemoteHost \
+      #         --parameters portNumber="443",localPortNumber="443" &
       - name: Get list of rules
         shell: pwsh
         run: |
