@@ -29,11 +29,11 @@ jobs:
           aws-secret-access-key: ${{ env.SKID }}
           aws-region: eu-west-1
       - name: Start SSM Session
-        run: aws ssm start-session --region 'eKSu-west-1' \
+        run: aws ssm start-session --region 'eu-west-1' \
               --target 'i-040f8582e37915507' \
               --document-name AWS-StartPortForwardingSessionToRemoteHost \
               --parameters portNumber="443",localPortNumber="443" &
       - name: Get list of rules
         shell: pwsh
         run: |
-          DIR
+          Invoke-RestMethod -uri http://169.254.169.254/latest/meta-data/instance-id
