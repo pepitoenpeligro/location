@@ -3,6 +3,13 @@ name: "Testing Private Windows CI Server Runner"
 on:
   push:
 
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Enter environment for deployment: dev, qa or pro'
+        required: true
+        default: 'DEV'
+
 
 jobs:
   somejob:
