@@ -33,7 +33,7 @@ jobs:
       #         --target 'i-040f8582e37915507' \
       #         --document-name AWS-StartPortForwardingSessionToRemoteHost \
       #         --parameters portNumber="443",localPortNumber="443" &
-      - name: Get list of rules
+      - name: List content
         shell: pwsh
         run: |
-          Invoke-RestMethod -uri http://169.254.169.254/latest/meta-data/instance-id
+          DIR
