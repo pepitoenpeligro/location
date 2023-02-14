@@ -36,4 +36,4 @@ jobs:
       - name: Get list of rules
         shell: pwsh
         run: |
-          HOSTNAME
+          DIR
