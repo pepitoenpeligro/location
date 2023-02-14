@@ -19,8 +19,8 @@ jobs:
       - name: Credentials to DEV Environment
         if: ${{ github.event.inputs.environment=='dev' }}
         run: | 
-           echo "AKID=${{ secrets.CHEM_AWS_DEV_AK }}" >> $GITHUB_ENV
-           echo "SKID=${{ secrets.CHEM_AWS_DEV_SK }}">> $GITHUB_ENV
+           echo "AKID=${{ secrets.AKID }}" >> $GITHUB_ENV
+           echo "SKID=${{ secrets.SKID }}">> $GITHUB_ENV
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
