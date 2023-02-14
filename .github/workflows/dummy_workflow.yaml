@@ -1,14 +1,12 @@
 name: "Testing Private Windows CI Server Runner"
 
 on:
-  push:
-
   workflow_dispatch:
     inputs:
       environment:
         description: 'Enter environment for deployment: dev, qa or pro'
         required: true
-        default: 'DEV'
+        default: 'dev'
 
 
 jobs:
@@ -18,8 +16,8 @@ jobs:
     
       - uses: actions/checkout@v3
 
-      - name: Credentials to DEV Environment
-        if: ${{ github.event.inputs.environment=='DEV' }}
+      - name: Credentials to dev Environment
+        if: ${{ github.event.inputs.environment=='dev' }}
         run: | 
            echo "AKID=${{ secrets.AKID }}" >> $GITHUB_ENV
            echo "SKID=${{ secrets.SKID }}">> $GITHUB_ENV
