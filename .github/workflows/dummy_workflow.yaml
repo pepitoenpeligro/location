@@ -1,0 +1,12 @@
+name: "Testing Private Windows CI Server Runner"
+
+on:
+  push:
+
+
+jobs:
+  somejob:
+    runs-on: self-hosted
+    steps:
+    
+      - uses: actions/checkout@v3
