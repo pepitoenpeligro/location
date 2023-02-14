@@ -34,6 +34,6 @@ jobs:
       #         --document-name AWS-StartPortForwardingSessionToRemoteHost \
       #         --parameters portNumber="443",localPortNumber="443" &
       - name: List content
-        shell: pwsh
+        shell: powershell
         run: |
           DIR
