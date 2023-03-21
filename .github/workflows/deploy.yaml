@@ -10,6 +10,11 @@ jobs:
     
       - uses: actions/checkout@v3
 
+      - name: Get Arguments for Docker Build
+        shell: |
+          export DOCKER_ARGUMENTS=$(cat .env.dockerfile.development |  tr '\n' ' ')
+          echo "::set-env name=DOCKER_ARGUMENTS::$DOCKER_ARGUMENTS"
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -30,5 +35,7 @@ jobs:
           push: true
           tags: pepitoenpeligro/flutter-dev
           context: .
-          build-args: v1.16.3
-          file: Dockerfile.ci
+          build-args: $DOCKER_ARGUMENTS
+          file: Dockerfile.development
+          platforms: linux/amd64,linux/arm64
+          
