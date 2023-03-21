@@ -1,18 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ffi';
-
-import 'package:async/async.dart';
-
-import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:path_provider/path_provider.dart';
-
+import 'dart:io';
 import 'dart:convert';
 
-import 'dart:io';
-
+import 'package:flutter/material.dart';
+import 'package:async/async.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:location/state/AppState.dart';
+import 'package:location/state/AuthState.dart';
+import 'package:location/ui/Login.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+
+import 'models/Position.dart';
+import 'utils/Route.dart';
 
 Future<String> get _localPath async {
   final directory = await getApplicationDocumentsDirectory();
@@ -59,28 +61,54 @@ void main() {
   runApp(const MyApp());
 }
 
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+//   // This widget is the root of your application.
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'DementiApp',
+//       theme: ThemeData(
+//           // This is the theme of your application.
+//           //
+//           // Try running your application with "flutter run". You'll see the
+//           // application has a blue toolbar. Then, without quitting the app, try
+//           // changing the primarySwatch below to Colors.green and then invoke
+//           // "hot reload" (press "r" in the console where you ran "flutter run",
+//           // or simply save your changes to "hot reload" in a Flutter IDE).
+//           // Notice that the counter didn't reset back to zero; the application
+//           // is not restarted.
+//           primarySwatch: Colors.indigo,
+//           useMaterial3: true),
+//       // home: const MyHomePage(title: 'DementiApp'),
+//       home: SignIn(),
+//       // builder: (context, child) {
+//       //   return const SignIn();
+//       // },
+//     );
+//   }
+// }
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'DementiApp',
-      theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.indigo,
-          useMaterial3: true),
-      home: const MyHomePage(title: 'DementiApp'),
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AppState>(create: (_) => AppState()),
+          ChangeNotifierProvider<AuthState>(create: (_) => AuthState()),
+        ],
+        child: MaterialApp(
+          title: 'DementiApp',
+          theme: ThemeData(primarySwatch: Colors.indigo, useMaterial3: true),
+          debugShowCheckedModeBanner: false,
+          routes: Routes.route(),
+          onGenerateRoute: (settings) => Routes.onGenerateRoute(settings),
+          onUnknownRoute: (settings) => Routes.onUnknownRoute(settings),
+          initialRoute: "SplashPage",
+        ));
   }
 }
 
@@ -354,20 +382,6 @@ class _MyHomePageState extends State<MyHomePage> {
       // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-}
-
-class PositionInterface {
-  int? timestamp;
-  double? latitude;
-  double? longitude;
-
-  @override
-  String toString() {
-    return toJson().toString();
-  }
-
-  Map toJson() =>
-      {'timestamp': timestamp, 'latitude': latitude, 'longitude': longitude};
 }
 
 class DataHome extends StatefulWidget {

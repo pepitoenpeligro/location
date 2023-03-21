@@ -1,4 +1,4 @@
-name: "Testing Private Windows CI Server Runner"
+name: "Testing"
 
 on:
   workflow_dispatch:

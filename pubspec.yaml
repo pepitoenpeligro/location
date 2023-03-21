@@ -39,6 +39,10 @@ dependencies:
   async: ^2.10.0
   path_provider: ^2.0.12
   lottie: ^2.2.0
+  equatable: ^2.0.5
+  provider: ^6.0.5
+  http: ^0.13.5
+  dio: ^5.0.0
 
 dev_dependencies:
   flutter_test:
