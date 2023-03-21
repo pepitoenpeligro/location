@@ -12,8 +12,8 @@ jobs:
 
       - name: Get Arguments for Docker Build
         run: |                    
-          export DOCKER_ARGUMENTS=$(cat .env.dockerfile.development |  tr '\n' ' ')
-          echo "::set-env name=DOCKER_ARGUMENTS::$DOCKER_ARGUMENTS"
+          DOCKER_ARGUMENTS=$(cat .env.dockerfile.development |  tr '\n' ' ')
+          echo "DOCKER_ARGUMENTS=$DOCKER_ARGUMENTS" >> $GITHUB_ENV
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
