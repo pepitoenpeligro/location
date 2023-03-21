@@ -36,7 +36,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v4
         with:
-          tags: pepitoenpeligro/flutter-dev:latest
+          tags: registry.hub.docker.com/pepitoenpeligro/flutter-dev:latest
           context: .
           build-args: ${{ env.DOCKER_ARGUMENTS }}
           file: Dockerfile.development
