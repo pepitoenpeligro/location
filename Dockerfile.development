@@ -19,11 +19,11 @@ USER flutter:flutter
 
 WORKDIR /home/flutter
 
-ENV PATH="$PATH:/home/flutter/bin"
-ENV PATH="$PATH:/home/flutter/bin/cache/dart-sdk/bin"
+ENV PATH="$PATH:/home/flutter/sdk/bin"
+ENV PATH="$PATH:/home/flutter/sdk/bin/cache/dart-sdk/bin"
 
 
-RUN git clone https://github.com/flutter/flutter.git -b $FLUTTER_VERSION
-RUN bin/flutter precache
-RUN bin/flutter config --no-analytics
+RUN git clone https://github.com/flutter/flutter.git -b $FLUTTER_VERSION sdk
+RUN sdk/bin/flutter precache
+RUN sdk/bin/flutter config --no-analytics
 
