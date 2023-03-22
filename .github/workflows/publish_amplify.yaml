@@ -1,0 +1,35 @@
+name: "Deploy to AWS Amplify"
+
+on:
+    push:
+      paths:
+        - 'lib/**'
+        - '.github/workflows/publish_amplify.yaml'
+  
+jobs:
+    deploy:
+        permissions:
+            id-token: write
+            contents: read
+        runs-on: ubuntu-latest
+
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v2
+              with:
+                audience: 'sts.amazonaws.com'
+                aws-region: eu-west-1
+                role-session-name: GitHubActions
+                role-to-assume: "${{ secrets.AWS_GITHUB_AMPLIFY_ROLE }}"
+                role-duration-seconds: 1500
+                mask-aws-account-id: true
+
+
+            - name: List AWS Amplify
+              shell: bash
+              run: |
+                AMPLIFY_APP=$(aws amplify list-apps | jq -r '.apps[] | select((.name=="Location")) | .appArn')
+                # flutter build web
