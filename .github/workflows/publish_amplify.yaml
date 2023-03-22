@@ -44,7 +44,7 @@ jobs:
 
             - name: Upload to private bucket
               run: |
-                aws s3 cp ./location.zip s3://$S3_BUCKET
+                aws s3 cp ./location-web-app.zip s3://$S3_BUCKET
 
             - name: Start Deployment to Amplifyy
               shell: bash
