@@ -5,7 +5,10 @@ on:
       paths:
         - 'lib/**'
         - '.github/workflows/publish_amplify.yaml'
-  
+
+env:
+    S3_BUCKET: location-web-app
+
 jobs:
     deploy:
         permissions:
@@ -27,12 +30,10 @@ jobs:
                 role-duration-seconds: 1500
                 mask-aws-account-id: true
 
-
             - name: Create web artifact bundle
               shell: bash
               run: |
                 docker run -v `pwd`:/home/dementiapp --rm pepitoenpeligro/flutter-dev:latest bash -c "cd /home/dementiapp && flutter pub get && flutter build web"
-                
             
             - name: Install zip
               uses: montudor/action-zip@v1
@@ -43,8 +44,7 @@ jobs:
 
             - name: Upload to private bucket
               run: |
-                aws s3 cp ./location.zip s3://location-web-app
-                # subir a s3 como zip
+                aws s3 cp ./location.zip s3://$S3_BUCKET
 
             - name: Start Deployment to Amplifyy
               shell: bash
@@ -53,5 +53,5 @@ jobs:
                     AMPLIFY_APP_BRANCH=$(aws amplify list-apps | jq -r '.apps[] | select((.name=="Location")) | .productionBranch.branchName')
                     aws amplify start-deployment \
                     --app-id $AMPLIFY_APP_ID \
-                    --branch-name AMPLIFY_APP_BRANCH \
-                    --source-url s3://location-web-app/location-web-app.zip
+                    --branch-name $AMPLIFY_APP_BRANCH \
+                    --source-url s3://$S3_BUCKET/location-web-app.zip
