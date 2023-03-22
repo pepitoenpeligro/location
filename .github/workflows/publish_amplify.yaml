@@ -8,6 +8,7 @@ on:
 
 env:
     S3_BUCKET: location-web-app
+    ARTIFAC_NAME: location-web-app.zip
 
 jobs:
     deploy:
@@ -39,12 +40,12 @@ jobs:
               uses: montudor/action-zip@v1
 
             - name: Compress web artifact bundle as zaip
-              run: zip -qq -r location.zip build/web/*
+              run: zip -qq -r $ARTIFAC_NAME build/web/*
               working-directory: ./
 
             - name: Upload to private bucket
               run: |
-                aws s3 cp ./location-web-app.zip s3://$S3_BUCKET
+                aws s3 cp ./$ARTIFAC_NAME s3://$S3_BUCKET
 
             - name: Start Deployment to Amplifyy
               shell: bash
@@ -54,4 +55,4 @@ jobs:
                     aws amplify start-deployment \
                     --app-id $AMPLIFY_APP_ID \
                     --branch-name $AMPLIFY_APP_BRANCH \
-                    --source-url s3://$S3_BUCKET/location-web-app.zip
+                    --source-url s3://$S3_BUCKET/$ARTIFAC_NAME
