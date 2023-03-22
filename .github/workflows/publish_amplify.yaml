@@ -30,8 +30,8 @@ jobs:
               with:
                 audience: 'sts.amazonaws.com'
                 aws-region: eu-west-1
-                role-session-name: $SESSION_NAME
-                role-to-assume: ${{ secrets.AWS_GITHUB_AMPLIFY_ROLE }}
+                role-session-name: OGH
+                role-to-assume: "${{ secrets.AWS_GITHUB_AMPLIFY_ROLE }}"
                 role-duration-seconds: 1500
                 mask-aws-account-id: true
 
