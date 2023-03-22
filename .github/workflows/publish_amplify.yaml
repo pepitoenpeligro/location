@@ -17,13 +17,19 @@ jobs:
         steps:
             - uses: actions/checkout@v3
 
+            - name:
+                echo $GITHUB_ACTION
+                echo $GITHUB_SHA
+                echo ${GITHUB_SHA::7}
+
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v2
               with:
                 aws-region: eu-west-1
+                role-session-name: $GITHUB_ACTION
                 role-to-assume: ${{ secrets.AWS_GITHUB_AMPLIFY_ROLE }}
-                role-session-name: OpenIDConnectAWS-GH-Amplify-${GITHUB_SHA::7}
                 role-duration-seconds: 1500
+                mask-aws-account-id: true
 
 
             - name: List AWS Amplify
