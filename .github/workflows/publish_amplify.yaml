@@ -9,6 +9,7 @@ on:
 env:
     S3_BUCKET: location-web-app
     ARTIFAC_NAME: location-web-app.zip
+    AMPLIFY_APP_NAME: Location
 
 jobs:
     deploy:
@@ -17,11 +18,10 @@ jobs:
             contents: read
         runs-on: ubuntu-latest
 
-
         steps:
             - uses: actions/checkout@v3
-
-
+              with:
+                fetch-depth: 1
 
             - name: Create web artifact bundle
               shell: bash
@@ -30,23 +30,6 @@ jobs:
             
             - name: Install zip
               uses: montudor/action-zip@v1
-
-
-            - name: List files
-              shell: bash
-              run: |
-                ls -la
-
-            - name: List files build
-              shell: bash
-              run: |
-                  ls -la build
-
-            - name: List files build/web
-              shell: bash
-              run: |
-                  ls -la build/web
-         
 
             - name: Compress web artifact bundle as zaip
               run: zip -qq -r ../../$ARTIFAC_NAME ./*
@@ -69,7 +52,7 @@ jobs:
             - name: Start Deployment to Amplifyy
               shell: bash
               run: |
-                    AMPLIFY_APP_ID=$(aws amplify list-apps | jq -r '.apps[] | select((.name=="Location")) | .appId')
+                    AMPLIFY_APP_ID=$(aws amplify list-apps | jq -r --arg AMPLIFY_APP_NAME "$AMPLIFY_APP_NAME" '.apps[] | select((.name==$AMPLIFY_APP_NAME)) | .appId')
                     AMPLIFY_APP_BRANCH=$(aws amplify list-apps | jq -r '.apps[] | select((.name=="Location")) | .productionBranch.branchName')
                     aws amplify start-deployment \
                     --app-id $AMPLIFY_APP_ID \
