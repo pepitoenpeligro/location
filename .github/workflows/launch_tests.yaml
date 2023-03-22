@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/launch_tests.yaml'
+      - 'test/**'
 
 jobs:
     test:
