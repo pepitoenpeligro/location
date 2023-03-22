@@ -21,15 +21,7 @@ jobs:
         steps:
             - uses: actions/checkout@v3
 
-            - name: Configure AWS Credentials
-              uses: aws-actions/configure-aws-credentials@v2
-              with:
-                audience: 'sts.amazonaws.com'
-                aws-region: eu-west-1
-                role-session-name: GitHubActions
-                role-to-assume: "${{ secrets.AWS_GITHUB_AMPLIFY_ROLE }}"
-                role-duration-seconds: 1500
-                mask-aws-account-id: true
+
 
             - name: Create web artifact bundle
               shell: bash
@@ -39,9 +31,36 @@ jobs:
             - name: Install zip
               uses: montudor/action-zip@v1
 
+
+            - name: List files
+              shell: bash
+              run: |
+                ls -la
+
+            - name: List files build
+              shell: bash
+              run: |
+                  ls -la build
+
+            - name: List files build/web
+              shell: bash
+              run: |
+                  ls -la build/web
+         
+
             - name: Compress web artifact bundle as zaip
-              run: zip -qq -r $ARTIFAC_NAME ./*
-              working-directory: ./build/web
+              run: zip -qq -r ../../$ARTIFAC_NAME ./*
+              working-directory: build/web
+
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v2
+              with:
+                audience: 'sts.amazonaws.com'
+                aws-region: eu-west-1
+                role-session-name: GitHubActions
+                role-to-assume: "${{ secrets.AWS_GITHUB_AMPLIFY_ROLE }}"
+                role-duration-seconds: 1500
+                mask-aws-account-id: true
 
             - name: Upload to private bucket
               run: |
