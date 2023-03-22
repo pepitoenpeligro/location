@@ -20,7 +20,8 @@ jobs:
             - name: Compound session name
               shell: bash
               run: |
-               SESSION_NAME=${GITHUB_ACTOR}-${GITHUB_REPOSITORY}-${GITHUB_SHA::7} 
+               DATE=`date +%s`
+               SESSION_NAME=${GITHUB_REPOSITORY}-${GITHUB_SHA::7}-${DATE}
                echo "SESSION_NAME=$SESSION_NAME" >> $GITHUB_ENV
                echo $SESSION_NAME
 
