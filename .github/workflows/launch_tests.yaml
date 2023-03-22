@@ -10,7 +10,7 @@ jobs:
         runs-on: ubuntu-latest
         container: 
             image: pepitoenpeligro/flutter-dev:latest
-            options: --user flutter
+            options: --user 1441
         steps:
             - uses: actions/checkout@v3
 
