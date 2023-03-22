@@ -31,4 +31,5 @@ jobs:
             - name: List AWS Amplify
               shell: bash
               run: |
-                aws amplify list-apps 
+                AMPLIFY_APP=$(aws amplify list-apps | jq -r '.apps[] | select((.name=="Location")) | .appArn')
+                # flutter build web
