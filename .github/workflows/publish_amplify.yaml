@@ -1,0 +1,31 @@
+name: "Deploy to AWS Amplify"
+
+on:
+    push:
+      paths:
+        - 'lib/**'
+        - '.github/workflows/publish_amplify.yaml'
+  
+jobs:
+    deploy:
+        permissions:
+            id-token: write
+            contents: read
+        runs-on: ubuntu-latest
+
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v1
+              with:
+                aws-region: eu-west-1
+                role-to-assume: ${{ secrets.AWS_GITHUB_AMPLIFY_ROLE }}
+                role-session-name: OIDCSession
+
+
+            - name: List AWS Amplify
+              shell: bash
+              run: |
+                aws amplify list-apps 
