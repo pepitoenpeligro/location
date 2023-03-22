@@ -22,13 +22,16 @@ jobs:
               run: |
                 echo $GITHUB_ACTION
                 echo $GITHUB_SHA
+                echo $GITHUB_REPOSITORY
+                echo $GITHUB_WORKFLOW
+                echo $GITHUB_ACTOR
                 echo ${GITHUB_SHA::7}
 
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v2
               with:
                 aws-region: eu-west-1
-                role-session-name: $GITHUB_ACTION
+                role-session-name: ${{ $GITHUB_REPOSITORY-$GITHUB_WORKFLOW-$GITHUB_ACTOR-${GITHUB_SHA::7} }}
                 role-to-assume: ${{ secrets.AWS_GITHUB_AMPLIFY_ROLE }}
                 role-duration-seconds: 1500
                 mask-aws-account-id: true
