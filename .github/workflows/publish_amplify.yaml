@@ -40,7 +40,7 @@ jobs:
               uses: montudor/action-zip@v1
 
             - name: Compress web artifact bundle as zaip
-              run: zip -qq -r $ARTIFAC_NAME build/web/*
+              run: cd build/web && zip -qq -r $ARTIFAC_NAME *
               working-directory: ./
 
             - name: Upload to private bucket
