@@ -31,5 +31,28 @@ jobs:
             - name: List AWS Amplify
               shell: bash
               run: |
-                AMPLIFY_APP=$(aws amplify list-apps | jq -r '.apps[] | select((.name=="Location")) | .appArn')
-                # flutter build web
+                AMPLIFY_APP=$(aws amplify list-apps | jq -r '.apps[] | select((.name=="Location")) | .appId')
+                docker run -v `pwd`:/home/dementiapp -it pepitoenpeligro/flutter-dev:latest flutter pub get && flutter build web
+                
+            
+            - name: Install zip
+              uses: montudor/action-zip@v1
+
+            - name: Compress Bundle as Zip
+              run: zip -qq -r location.zip build/web/*
+              working-directory: ./
+
+            - name: Upload to private bucket
+              run: |
+                aws s3 cp ./location.zip s3://location-web-app
+                # subir a s3 como zip
+
+            - name: Start Deployment to Amplifyy
+              shell: bash
+              run: |
+                    AMPLIFY_APP_ID=$(aws amplify list-apps | jq -r '.apps[] | select((.name=="Location")) | .appId')
+                    AMPLIFY_APP_BRANCH=$(aws amplify list-apps | jq -r '.apps[] | select((.name=="Location")) | .productionBranch.branchName')
+                    aws amplify start-deployment \
+                    --app-id $AMPLIFY_APP_ID \
+                    --branch-name AMPLIFY_APP_BRANCH \
+                    --source-url s3://location-web-app/location-web-app.zip
