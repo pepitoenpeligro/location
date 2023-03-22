@@ -21,7 +21,7 @@ jobs:
               shell: bash
               run: |
                DATE=`date +%s`
-               SESSION_NAME=${GITHUB_REPOSITORY}-${GITHUB_SHA::7}-${DATE}
+               SESSION_NAME=${GITHUB_REPOSITORY}-${GITHUB_SHA::7}-$DATE
                echo "SESSION_NAME=$SESSION_NAME" >> $GITHUB_ENV
                echo $SESSION_NAME
 
