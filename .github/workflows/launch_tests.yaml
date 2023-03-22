@@ -9,7 +9,7 @@ jobs:
     test:
         runs-on: ubuntu-latest
         container: 
-            image: pepitoenpeligro/flutter-dev:latests
+            image: pepitoenpeligro/flutter-dev:latest
         steps:
             - uses: actions/checkout@v3
 
