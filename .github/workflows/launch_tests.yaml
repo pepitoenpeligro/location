@@ -24,4 +24,4 @@ jobs:
 
             - name: Launch tests
               run: |
-                  flutter test
+                flutter test
