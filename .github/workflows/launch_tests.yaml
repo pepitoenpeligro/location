@@ -1,0 +1,26 @@
+name: "Launch Tests"
+
+on:
+  push:
+    paths:
+      - '.github/workflows/launch_tests.yaml'
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        container: 
+            image: pepitoenpeligro/flutter-dev:latests
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Show Flutter
+              run: |
+                flutter --version
+
+            - name: Install dependencies
+              run: |
+                flutter pub get
+
+            - name: Launch tests
+              run: |
+                  flutter test
