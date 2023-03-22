@@ -22,8 +22,8 @@ jobs:
               with:
                 aws-region: eu-west-1
                 role-to-assume: ${{ secrets.AWS_GITHUB_AMPLIFY_ROLE }}
-                role-session-name: OpenIDConnectAWS_GH_Amplify_${GITHUB_SHA}
-                role-duration-seconds: 1200
+                role-session-name: OpenIDConnectAWS-GH-Amplify-${GITHUB_SHA::7}
+                role-duration-seconds: 1500
 
 
             - name: List AWS Amplify
