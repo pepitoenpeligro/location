@@ -13,10 +13,7 @@ jobs:
     steps:
     
       - uses: actions/checkout@v3
-        with:
-          submodules: 'recursive'
-          fetch-depth: 0
-
+  
       - name: Get Arguments for Docker Build
         run: |                    
           DOCKER_ARGUMENTS=$(cat .env.dockerfile.development |  tr '\n' ' ')
