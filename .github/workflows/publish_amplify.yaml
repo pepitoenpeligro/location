@@ -31,7 +31,7 @@ jobs:
             - name: Create web artifact bundle
               shell: bash
               run: |
-                docker run -v `pwd`:/home/dementiapp --rm pepitoenpeligro/flutter-dev:latest flutter pub get && flutter build web
+                docker run -v `pwd`:/home/dementiapp --rm pepitoenpeligro/flutter-dev:latest cd /home/dementiapp && flutter pub get && flutter build web
                 
             
             - name: Install zip
