@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
-class RegisterHome extends StatefulWidget {
-  const RegisterHome({super.key, required this.title});
-  final String title;
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
 
   @override
-  State<RegisterHome> createState() => _RegisterHomeState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _RegisterHomeState extends State<RegisterHome> {
+class _SignUpState extends State<SignUp> {
   String toShow = "";
 
   @override
@@ -19,11 +18,11 @@ class _RegisterHomeState extends State<RegisterHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(title: Text("SignUp")),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[Text(widget.title)],
+          children: <Widget>[Text("SignUp")],
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:location/utils/UIButton.dart';
 import 'package:location/utils/snackbar.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -43,29 +44,23 @@ class _SignInState extends State<SignIn> {
               Container(
                   // color: Colors.red,
                   child: SizedBox(
-                      width: 200,
-                      height: 200,
+                      width: 180,
+                      height: 180,
                       child: Visibility(
                           visible: true,
                           child: Lottie.network(
                               'https://assets6.lottiefiles.com/private_files/lf30_iraugwwv.json')))),
-              const SizedBox(height: 50),
+              const SizedBox(height: 1),
               _entryField('Enter email', controller: _emailController),
               _entryField('Enter password',
                   controller: _passwordController, isPassword: true),
               _emailLoginButton(context),
-              const SizedBox(height: 20),
-
-              // _labelButton('Forget password?', onPressed: () {
-              //   Navigator.of(context).pushNamed('/ForgetPasswordPage');
-              // }),
-              // const Divider(
-              //   height: 30,
-              // ),
-              // const SizedBox(
-              //   height: 30,
-              // ),
-              // const SizedBox(height: 100),
+              const SizedBox(
+                height: 30,
+              ),
+              // const SizedBox(height: 1),
+              _registerPageButton(context),
+              const SizedBox(height: 100),
             ],
           ),
         ),
@@ -119,11 +114,23 @@ class _SignInState extends State<SignIn> {
   Widget _emailLoginButton(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 35),
-      child: FilledButton(
-        child: Text("Submit"),
+      child: UIButton(
+        label: "Login",
         onPressed: _emailLogin,
-        // borderRadius: 30,
+        borderRadius: 30,
       ),
+    );
+  }
+
+  Widget _registerPageButton(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 35),
+      child: UIButton(
+          borderRadius: 30,
+          label: "Register",
+          onPressed: () {
+            Navigator.of(context).pushNamed('/SignUp');
+          }),
     );
   }
 

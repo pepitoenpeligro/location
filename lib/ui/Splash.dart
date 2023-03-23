@@ -37,8 +37,10 @@ class _SplashPageState extends State<SplashPage> {
 
   void timer() async {
     Future.delayed(const Duration(seconds: 2)).then((_) {
-      var state = Provider.of<AuthState>(context, listen: false);
-      state.getCurrentUser(context: context);
+      Navigator.of(context).pop();
+      Navigator.of(context).pushNamed('/SignIn');
+      // var state = Provider.of<AuthState>(context, listen: false);
+      // state.getCurrentUser(context: context);
     });
   }
 
