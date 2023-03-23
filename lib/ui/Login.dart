@@ -58,7 +58,6 @@ class _SignInState extends State<SignIn> {
               const SizedBox(
                 height: 30,
               ),
-              // const SizedBox(height: 1),
               _registerPageButton(context),
               const SizedBox(height: 100),
             ],
@@ -149,10 +148,8 @@ class _SignInState extends State<SignIn> {
               context: context)
           .then((status) {
         if (state.user != null) {
-          print("Login success");
+          print("[_emailLogin] state.user no es null");
           Utils.customSnackBar(context, 'Login Success');
-          print("El token que recojo es:");
-          print(state.user!.notificationToken);
 
           state.getCurrentUser(context: context).then((status) {
             loader.hideLoader();
@@ -160,25 +157,15 @@ class _SignInState extends State<SignIn> {
             // widget.loginCallback!();
             Navigator.of(context).pushNamed('/Home');
           }).catchError((error) {
-            print("Hubo error");
+            Utils.customSnackBar(context, '[Login] error getting current user');
           });
-
-          // loader.hideLoader();
-          // Navigator.pop(context);
-          //   // widget.loginCallback!();
-          //   Navigator.of(context).pushNamed('/Home');
         } else {
-          // cprint('Unable to login', errorIn: '_emailLoginButton');
           loader.hideLoader();
-          print("Login not success");
-          print(state.toString());
-          Utils.customSnackBar(context, 'Login Unsuccess');
+          print("[_emailLogin] state.user ES NULL");
+          Utils.customSnackBar(context, '[Login] your credentials are wrong');
         }
       });
     }
-    // else {
-    //   loader.hideLoader();
-    // }
   }
 
   @override
