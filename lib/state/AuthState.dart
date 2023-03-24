@@ -25,6 +25,49 @@ class AuthState extends AppState {
     notifyListeners();
   }
 
+  Future<bool?> confirm(String username, String code,
+      {required BuildContext context}) async {
+    try {
+      isWorking = true;
+      // Utils.customSnackBar(context, 'Doing SignIn');
+      final dio = Dio();
+      log("[Cognito] User Confirm start");
+      final response = await dio.post(
+          'https://uz7rggk5of.execute-api.eu-west-1.amazonaws.com/prod/auth/confirm_signup',
+          options: Options(headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+          }),
+          data: jsonEncode({"username": username, "code": code}));
+
+      final statusConfirmed = response.data["confirmed"];
+      if (statusConfirmed == true) {
+        // usuario confirmado, lo llevamos de vuelta al login
+        return statusConfirmed;
+      }
+
+      log("[Cognito] User Confirm ends");
+    } on DioError catch (e) {
+      if (e.response != null) {
+        // Handle Error 404.
+        // In case of `UserNotFoundException`
+        if (e.response?.data["message"]["code"] == "NotAuthorizedException") {
+          print("Ya estas confirmado paqui");
+          // We should open a new interface in order to confirm cognito user
+        }
+        print(e.response?.data);
+        print(e.response?.data["message"]["code"]);
+        print(e.response?.headers);
+        print(e.response?.requestOptions);
+      } else {
+        print(e.requestOptions);
+        print(e.message);
+      }
+      return false;
+    } finally {
+      isWorking = false;
+    }
+  }
+
   Future<String?> signIn(String email, String password,
       {required BuildContext context}) async {
     try {
@@ -51,14 +94,18 @@ class AuthState extends AppState {
       return accessToken;
     } on DioError catch (e) {
       if (e.response != null) {
+        // Handle Error 404.
+        // In case of `UserNotFoundException`
+        if (e.response?.data["message"]["code"] ==
+            "UserNotConfirmedException") {
+          print("No estas confirmao paqui");
+          return "UserNotConfirmedException";
+          // We should open a new interface in order to confirm cognito user
+        }
         print(e.response?.data);
         print(e.response?.data["message"]["code"]);
         print(e.response?.headers);
         print(e.response?.requestOptions);
-        if (e.response?.data["message"]["code"] == "UserNotFoundException") {
-          print("No estas confirmao paqui");
-          // We should open a new interface in order to confirm cognito user
-        }
       } else {
         print(e.requestOptions);
         print(e.message);
@@ -89,8 +136,6 @@ class AuthState extends AppState {
       // user = User(email: email, notificationToken: accessToken);
       if (response.statusCode == 200) {
         return true;
-      } else {
-        return false;
       }
     } catch (error) {
       print("ERROR makeing post to sign up");

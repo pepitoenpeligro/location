@@ -151,8 +151,14 @@ class _SignInState extends State<SignIn> {
           print("[_emailLogin] state.user no es null");
           Utils.customSnackBar(context, 'Login Success');
 
+          if (status == "UserNotConfirmedException") {
+            print("El usuario no esta confirmado, hay que llevarlo a confirm");
+            Navigator.pop(context);
+            // widget.loginCallback!();
+            Navigator.of(context).pushNamed('/ConfirmUser');
+          }
+
           state.getCurrentUser(context: context).then((status) {
-            loader.hideLoader();
             Navigator.pop(context);
             // widget.loginCallback!();
             Navigator.of(context).pushNamed('/Home');
@@ -162,8 +168,20 @@ class _SignInState extends State<SignIn> {
         } else {
           loader.hideLoader();
           print("[_emailLogin] state.user ES NULL");
-          Utils.customSnackBar(context, '[Login] your credentials are wrong');
+          print("EL STATUS ES");
+          print(status);
+
+          if (status == "UserNotConfirmedException") {
+            print("El usuario no esta confirmado, hay que llevarlo a confirm");
+            Navigator.pop(context);
+            // widget.loginCallback!();
+            Navigator.of(context).pushNamed('/ConfirmUser');
+          } else {
+            Utils.customSnackBar(context, '[Login] your credentials are wrong');
+          }
         }
+
+        loader.hideLoader();
       });
     }
   }

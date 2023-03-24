@@ -5,6 +5,7 @@ import 'package:location/main.dart';
 import 'package:location/ui/Login.dart';
 import 'package:location/ui/Register.dart';
 import 'package:location/ui/Splash.dart';
+import 'package:location/ui/ConfirmUser.dart';
 
 import 'package:location/utils/CustomRoute.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +33,10 @@ class Routes {
       case "SignIn":
         return CustomRoute<bool>(
             settings: settings, builder: (BuildContext context) => SignIn());
+      case "ConfirmUser":
+        return CustomRoute<bool>(
+            settings: settings,
+            builder: (BuildContext context) => ConfirmUser());
       case "Home":
         return CustomRoute<bool>(
             settings: settings,

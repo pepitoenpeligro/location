@@ -6,27 +6,24 @@ import 'package:provider/provider.dart';
 import '../utils/Loader.dart';
 import '../state/AuthState.dart';
 
-class SignUp extends StatefulWidget {
-  final VoidCallback? loginCallback; //!
-  const SignUp({Key? key, this.loginCallback}) : super(key: key);
+class ConfirmUser extends StatefulWidget {
+  const ConfirmUser({Key? key}) : super(key: key);
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  State<ConfirmUser> createState() => _ConfirmUserState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _ConfirmUserState extends State<ConfirmUser> {
   late TextEditingController _usernameController;
-  late TextEditingController _emailController;
-  late TextEditingController _passwordController;
+  late TextEditingController _confirmCodeController;
 
   late Loader loader;
   String toShow = "";
 
   @override
   void initState() {
+    _confirmCodeController = TextEditingController();
     _usernameController = TextEditingController();
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
     loader = Loader();
     super.initState();
   }
@@ -60,18 +57,7 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  Widget _registerButton(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 35),
-      child: UIButton(
-        label: "Register",
-        onPressed: _doRegister,
-        borderRadius: 30,
-      ),
-    );
-  }
-
-  void _doRegister() {
+  void _doConfirm() {
     var state = Provider.of<AuthState>(context, listen: false);
     if (state.isWorking) {
       return;
@@ -82,24 +68,33 @@ class _SignUpState extends State<SignUp> {
     //     context, _emailController.text, _passwordController.text);
     if (isValid) {
       state
-          .signUp(_usernameController.text, _emailController.text,
-              _passwordController.text,
+          .confirm(_usernameController.text, _confirmCodeController.text,
               context: context)
           .then((status) {
-        print("STATUS ");
-        print(status);
         if (status == true) {
-          Utils.customSnackBar(context, '[SignUp] Success');
-
+          Utils.customSnackBar(context, '[Confirm] Success');
           Navigator.pop(context);
           Navigator.of(context).pushNamed('/SignIn');
         } else {
           loader.hideLoader();
-          Utils.customSnackBar(context, '[SignUp] your credentials are wrong');
+          Utils.customSnackBar(
+              context, '[Confirm] your user or code is incorrect');
         }
       });
     }
+
     loader.hideLoader();
+  }
+
+  Widget _confirmButton(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 35),
+      child: UIButton(
+        label: "Confirm User",
+        onPressed: _doConfirm,
+        borderRadius: 30,
+      ),
+    );
   }
 
   Widget _body(BuildContext context) {
@@ -125,10 +120,8 @@ class _SignUpState extends State<SignUp> {
                               'https://assets6.lottiefiles.com/private_files/lf30_iraugwwv.json')))),
               const SizedBox(height: 1),
               _entryField('Enter username', controller: _usernameController),
-              _entryField('Enter email', controller: _emailController),
-              _entryField('Enter password',
-                  controller: _passwordController, isPassword: true),
-              _registerButton(context),
+              _entryField('Enter Code', controller: _confirmCodeController),
+              _confirmButton(context),
             ],
           ),
         ),
@@ -140,7 +133,7 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("SignUp"),
+        title: Text("Confirm User"),
         centerTitle: true,
       ),
       body: _body(context),
